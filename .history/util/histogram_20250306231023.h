@@ -9,7 +9,6 @@
 
 namespace leveldb {
 
-// 直方图类
 class Histogram {
  public:
   Histogram() {}
@@ -22,22 +21,22 @@ class Histogram {
   std::string ToString() const;
 
  private:
-  enum { kNumBuckets = 154 };  // 直方图的桶数（固定 154 个）
+  enum { kNumBuckets = 154 };
 
-  double Median() const;  // 计算中位数
+  double Median() const;
   double Percentile(double p) const;
   double Average() const;
   double StandardDeviation() const;
 
-  static const double kBucketLimit[kNumBuckets];  // 每个桶的边界值
+  static const double kBucketLimit[kNumBuckets];
 
-  double min_;          // 最小值
-  double max_;          // 最大值
-  double num_;          // 总样本数
-  double sum_;          // 所有样本的总和
-  double sum_squares_;  // 用于计算标准差的平方和
+  double min_;
+  double max_;
+  double num_;
+  double sum_;
+  double sum_squares_;
 
-  double buckets_[kNumBuckets];  // 154 个桶，每个桶存储落入的值的个数
+  double buckets_[kNumBuckets];
 };
 
 }  // namespace leveldb

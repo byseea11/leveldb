@@ -236,18 +236,17 @@ static void AppendWithSpace(std::string* str, Slice msg) {
   str->append(msg.data(), msg.size());
 }
 
-// 统计benchmark的性能数据的类
 class Stats {
  private:
-  double start_;           // 测试开始的时间
-  double finish_;          // 测试结束的时间
-  double seconds_;         // 记录总耗时(s)
-  int done_;               // 记录已完成的操作数量
-  int next_report_;        // 设定何时打印进度报告
-  int64_t bytes_;          // 统计已处理的数据字节数
-  double last_op_finish_;  // 记录上一个操作完成的时间
-  Histogram hist_;         // 记录操作时间分布的直方图
-  std::string message_;    // 额外信息
+  double start_;
+  double finish_;
+  double seconds_;
+  int done_;
+  int next_report_;
+  int64_t bytes_;
+  double last_op_finish_;
+  Histogram hist_;
+  std::string message_;
 
  public:
   Stats() { Start(); }
@@ -838,7 +837,8 @@ class Benchmark {
   void WriteRandom(ThreadState* thread) { DoWrite(thread, false); }
 
   void DoWrite(ThreadState* thread, bool seq) {
-    //  num_是一个成员变量，num_/=10000;是每一轮的递减量，也就是说，一次插入是插入10000条数据
+    //  num_是一个成员变量，num_
+    //  /=10000;是每一轮的递减量，也就是说，一次插入是插入10000条数据
     if (num_ != FLAGS_num) {
       char msg[100];
       std::snprintf(msg, sizeof(msg), "(%d ops)", num_);

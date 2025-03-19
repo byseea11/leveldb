@@ -24,7 +24,7 @@ class Histogram {
  private:
   enum { kNumBuckets = 154 };  // 直方图的桶数（固定 154 个）
 
-  double Median() const;  // 计算中位数
+  double Median() const;
   double Percentile(double p) const;
   double Average() const;
   double StandardDeviation() const;

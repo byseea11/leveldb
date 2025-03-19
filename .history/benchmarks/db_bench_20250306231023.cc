@@ -2,10 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
+#include <sys/types.h>
+
 #include <atomic>
 #include <cstdio>
 #include <cstdlib>
-#include <sys/types.h>
 
 #include "leveldb/cache.h"
 #include "leveldb/comparator.h"
@@ -13,7 +14,6 @@
 #include "leveldb/env.h"
 #include "leveldb/filter_policy.h"
 #include "leveldb/write_batch.h"
-
 #include "port/port.h"
 #include "util/crc32c.h"
 #include "util/histogram.h"
@@ -65,7 +65,6 @@ static const char* FLAGS_benchmarks =
     "zstduncomp,";
 
 // Number of key/values to place in database
-// 默认的插入数据库的键值对数量
 static int FLAGS_num = 1000000;
 
 // Number of read operations to do.  If negative, do FLAGS_num reads.
@@ -236,18 +235,17 @@ static void AppendWithSpace(std::string* str, Slice msg) {
   str->append(msg.data(), msg.size());
 }
 
-// 统计benchmark的性能数据的类
 class Stats {
  private:
-  double start_;           // 测试开始的时间
-  double finish_;          // 测试结束的时间
-  double seconds_;         // 记录总耗时(s)
-  int done_;               // 记录已完成的操作数量
-  int next_report_;        // 设定何时打印进度报告
-  int64_t bytes_;          // 统计已处理的数据字节数
-  double last_op_finish_;  // 记录上一个操作完成的时间
-  Histogram hist_;         // 记录操作时间分布的直方图
-  std::string message_;    // 额外信息
+  double start_;
+  double finish_;
+  double seconds_;
+  int done_;
+  int next_report_;
+  int64_t bytes_;
+  double last_op_finish_;
+  Histogram hist_;
+  std::string message_;
 
  public:
   Stats() { Start(); }
@@ -838,7 +836,6 @@ class Benchmark {
   void WriteRandom(ThreadState* thread) { DoWrite(thread, false); }
 
   void DoWrite(ThreadState* thread, bool seq) {
-    //  num_是一个成员变量，num_/=10000;是每一轮的递减量，也就是说，一次插入是插入10000条数据
     if (num_ != FLAGS_num) {
       char msg[100];
       std::snprintf(msg, sizeof(msg), "(%d ops)", num_);

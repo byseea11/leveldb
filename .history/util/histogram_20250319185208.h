@@ -24,7 +24,7 @@ class Histogram {
  private:
   enum { kNumBuckets = 154 };  // 直方图的桶数（固定 154 个）
 
-  double Median() const;  // 计算中位数
+  double Median() const;
   double Percentile(double p) const;
   double Average() const;
   double StandardDeviation() const;
@@ -37,7 +37,7 @@ class Histogram {
   double sum_;          // 所有样本的总和
   double sum_squares_;  // 用于计算标准差的平方和
 
-  double buckets_[kNumBuckets];  // 154 个桶，每个桶存储落入的值的个数
+  double buckets_[kNumBuckets];
 };
 
 }  // namespace leveldb

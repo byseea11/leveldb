@@ -25,10 +25,10 @@ class Histogram {
   enum { kNumBuckets = 154 };  // 直方图的桶数（固定 154 个）
 
   double Median() const;  // 计算中位数
-  double Percentile(double p) const;
-  double Average() const;
-  double StandardDeviation() const;
-
+  double Percentile(double p) const; // 计算分位数
+  double Average() const; // 计算平均值
+  double StandardDeviation() const; // 计算标准差
+  // 用桶的原因是因为在计算分位数以及中位数的时候需要对数据进行排序，所以就在存储数据的时候就直接按照桶进行存储
   static const double kBucketLimit[kNumBuckets];  // 每个桶的边界值
 
   double min_;          // 最小值

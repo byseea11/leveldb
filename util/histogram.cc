@@ -168,53 +168,73 @@ const double Histogram::kBucketLimit[kNumBuckets] = {
     1e200,
 };
 
+// 重置直方图
 void Histogram::Clear() {
+  // 最小值被设置为最大值，最大值被设置为 0
   min_ = kBucketLimit[kNumBuckets - 1];
   max_ = 0;
   num_ = 0;
   sum_ = 0;
   sum_squares_ = 0;
+  // 所有桶的值被设置为 0
   for (int i = 0; i < kNumBuckets; i++) {
     buckets_[i] = 0;
   }
 }
 
+// 添加一个值到直方图中
 void Histogram::Add(double value) {
   // Linear search is fast enough for our usage in db_bench
   int b = 0;
+  // 找到 value 所在的桶，b 为桶的索引
   while (b < kNumBuckets - 1 && kBucketLimit[b] <= value) {
     b++;
   }
+  // 增加桶中的值的数量
   buckets_[b] += 1.0;
+  // 更新最小值和最大值
   if (min_ > value) min_ = value;
   if (max_ < value) max_ = value;
+  // 更新总样本数、总和以及平方和
   num_++;
   sum_ += value;
   sum_squares_ += (value * value);
 }
 
+// 合并直方图，实际上是多个桶一起合并
 void Histogram::Merge(const Histogram& other) {
+  // 更新最小值和最大值
   if (other.min_ < min_) min_ = other.min_;
   if (other.max_ > max_) max_ = other.max_;
+  // 更新总样本数、总和以及平方和
   num_ += other.num_;
   sum_ += other.sum_;
   sum_squares_ += other.sum_squares_;
+  // 合并每个桶的数量（但是这里我觉得有一个问题，如果每一个直方图中的桶都达到了最大值，那么合并之后的直方图中的桶的数量就会超过最大值）
   for (int b = 0; b < kNumBuckets; b++) {
     buckets_[b] += other.buckets_[b];
   }
 }
 
+// 计算中位数
 double Histogram::Median() const { return Percentile(50.0); }
 
+// 计算分位数，参数p为百分比，比如50.0表示中位数
 double Histogram::Percentile(double p) const {
+  // 计算阈值，实际上是百分比对应的样本数
   double threshold = num_ * (p / 100.0);
+  // 已经统计的样本个数
   double sum = 0;
   for (int b = 0; b < kNumBuckets; b++) {
+    // 一次计算一个桶中的样本数
     sum += buckets_[b];
+    // 如果已经统计的样本数大于阈值，那么就可以计算分位数了
     if (sum >= threshold) {
       // Scale linearly within this bucket
+      // 计算左右边界值
       double left_point = (b == 0) ? 0 : kBucketLimit[b - 1];
       double right_point = kBucketLimit[b];
+      // 计算左右边界值对应的累积样本数
       double left_sum = sum - buckets_[b];
       double right_sum = sum;
       double pos = (threshold - left_sum) / (right_sum - left_sum);

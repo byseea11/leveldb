@@ -199,7 +199,25 @@ leveldb的benchmark实际上就是调用了google benchmark和google test的三�
    ```
 
    3. 
-1. delete
-2. read
-3. seek?/open/crc32c
-4. 元数据操作？（还蛮奇怪的为什么要叫这个名字）：compact/stats/sstables/hepprofile?
+2. delete
+3. read
+4. seek?/open/crc32c
+5. 元数据操作？（还蛮奇怪的为什么要叫这个名字）：compact/stats/sstables/hepprofile?
+
+
+
+# 分模块测试
+
+> 注意分模块测试这里需要有一些前置知识，即需要对benchmark有一定的了解才可以写出测试代码，所以第一步是需要深入探索benchmark源码
+
+1. memtable
+
+2. compactor c0,cn
+
+3. bloomfilter
+
+4. index
+
+5. hardware
+  1. multi-thread 
+  2. nvme

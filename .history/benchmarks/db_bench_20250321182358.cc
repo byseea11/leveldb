@@ -69,28 +69,22 @@ static const char* FLAGS_benchmarks =
 static int FLAGS_num = 1000000;
 
 // Number of read operations to do.  If negative, do FLAGS_num reads.
-// 默认的读操作数量， 如果为负数，则读取FLAGS_num次
 static int FLAGS_reads = -1;
 
 // Number of concurrent threads to run.
-// 默认的并发线程数量
 static int FLAGS_threads = 1;
 
 // Size of each value
-// 默认的value的大小，100字节在kv中算是一个比较小的值，
 static int FLAGS_value_size = 100;
 
 // Arrange to generate values that shrink to this fraction of
 // their original size after compression
-// ​数据在压缩后占原始数据大小的比例，值在0（完全不压缩）-1（完全压缩，不能实现），一般会有一些成熟的算法实现，会减少IO开销，但是会增加CPU开销
 static double FLAGS_compression_ratio = 0.5;
 
 // Print histogram of operation timings
-// 是否启动直方图
 static bool FLAGS_histogram = false;
 
 // Count the number of string comparisons performed
-// 是否​统计或记录字符串比较操作的次数
 static bool FLAGS_comparisons = false;
 
 // Number of bytes to buffer in memtable before compacting
@@ -280,36 +274,28 @@ class Stats {
     if (other.finish_ > finish_) finish_ = other.finish_;
 
     // Just keep the messages from one thread
-    // 只保留一个message对象
     if (message_.empty()) message_ = other.message_;
   }
 
-  // 计算耗时，调用stop的时候就会计算总耗时
   void Stop() {
     finish_ = g_env->NowMicros();
     seconds_ = (finish_ - start_) * 1e-6;
   }
 
-  // 添加一条消息
   void AddMessage(Slice msg) { AppendWithSpace(&message_, msg); }
 
-  // 结束单个操作
   void FinishedSingleOp() {
     if (FLAGS_histogram) {
-      // 这里的单位是um，1um = 1e-6s
       double now = g_env->NowMicros();
       double micros = now - last_op_finish_;
       hist_.Add(micros);
-      // 提示这是一个长操作（0.02s）
       if (micros > 20000) {
         std::fprintf(stderr, "long op: %.1f micros%30s\r", micros, "");
         std::fflush(stderr);
       }
-      // 更新上一次操作完成的时间
       last_op_finish_ = now;
     }
 
-    // 更新已完成的操作数量
     done_++;
     if (done_ >= next_report_) {
       if (next_report_ < 1000)
@@ -331,10 +317,8 @@ class Stats {
     }
   }
 
-  // 添加字节数
   void AddBytes(int64_t n) { bytes_ += n; }
 
-  // 打印benchmark的性能数据
   void Report(const Slice& name) {
     // Pretend at least one op was done in case we are running a benchmark
     // that does not call FinishedSingleOp().

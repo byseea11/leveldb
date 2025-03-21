@@ -69,28 +69,22 @@ static const char* FLAGS_benchmarks =
 static int FLAGS_num = 1000000;
 
 // Number of read operations to do.  If negative, do FLAGS_num reads.
-// 默认的读操作数量， 如果为负数，则读取FLAGS_num次
 static int FLAGS_reads = -1;
 
 // Number of concurrent threads to run.
-// 默认的并发线程数量
 static int FLAGS_threads = 1;
 
 // Size of each value
-// 默认的value的大小，100字节在kv中算是一个比较小的值，
 static int FLAGS_value_size = 100;
 
 // Arrange to generate values that shrink to this fraction of
 // their original size after compression
-// ​数据在压缩后占原始数据大小的比例，值在0（完全不压缩）-1（完全压缩，不能实现），一般会有一些成熟的算法实现，会减少IO开销，但是会增加CPU开销
 static double FLAGS_compression_ratio = 0.5;
 
 // Print histogram of operation timings
-// 是否启动直方图
 static bool FLAGS_histogram = false;
 
 // Count the number of string comparisons performed
-// 是否​统计或记录字符串比较操作的次数
 static bool FLAGS_comparisons = false;
 
 // Number of bytes to buffer in memtable before compacting
@@ -334,7 +328,6 @@ class Stats {
   // 添加字节数
   void AddBytes(int64_t n) { bytes_ += n; }
 
-  // 打印benchmark的性能数据
   void Report(const Slice& name) {
     // Pretend at least one op was done in case we are running a benchmark
     // that does not call FinishedSingleOp().

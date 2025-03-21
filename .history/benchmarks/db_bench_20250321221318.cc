@@ -77,20 +77,17 @@ static int FLAGS_reads = -1;
 static int FLAGS_threads = 1;
 
 // Size of each value
-// 默认的value的大小，100字节在kv中算是一个比较小的值，
+// 默认的value的大小
 static int FLAGS_value_size = 100;
 
 // Arrange to generate values that shrink to this fraction of
 // their original size after compression
-// ​数据在压缩后占原始数据大小的比例，值在0（完全不压缩）-1（完全压缩，不能实现），一般会有一些成熟的算法实现，会减少IO开销，但是会增加CPU开销
 static double FLAGS_compression_ratio = 0.5;
 
 // Print histogram of operation timings
-// 是否启动直方图
 static bool FLAGS_histogram = false;
 
 // Count the number of string comparisons performed
-// 是否​统计或记录字符串比较操作的次数
 static bool FLAGS_comparisons = false;
 
 // Number of bytes to buffer in memtable before compacting

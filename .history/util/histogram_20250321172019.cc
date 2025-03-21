@@ -265,7 +265,6 @@ double Histogram::StandardDeviation() const {
   return sqrt(variance);
 }
 
-// 将直方图转换为字符串
 std::string Histogram::ToString() const {
   std::string r;
   char buf[200];

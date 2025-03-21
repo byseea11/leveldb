@@ -86,11 +86,9 @@ static int FLAGS_value_size = 100;
 static double FLAGS_compression_ratio = 0.5;
 
 // Print histogram of operation timings
-// 是否启动直方图
 static bool FLAGS_histogram = false;
 
 // Count the number of string comparisons performed
-// 是否​统计或记录字符串比较操作的次数
 static bool FLAGS_comparisons = false;
 
 // Number of bytes to buffer in memtable before compacting

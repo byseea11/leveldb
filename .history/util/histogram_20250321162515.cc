@@ -257,15 +257,12 @@ double Histogram::Average() const {
   return sum_ / num_;
 }
 
-// 计算标准差
 double Histogram::StandardDeviation() const {
   if (num_ == 0.0) return 0;
-  // 简化之后的公式
   double variance = (sum_squares_ * num_ - sum_ * sum_) / (num_ * num_);
   return sqrt(variance);
 }
 
-// 将直方图转换为字符串
 std::string Histogram::ToString() const {
   std::string r;
   char buf[200];

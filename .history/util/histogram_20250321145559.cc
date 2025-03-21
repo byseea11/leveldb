@@ -228,7 +228,7 @@ double Histogram::Percentile(double p) const {
   for (int b = 0; b < kNumBuckets; b++) {
     // 一次计算一个桶中的样本数
     sum += buckets_[b];
-    // 计算核心
+    // 如果已经统计的样本数大于阈值，那么就可以计算分位数了
     if (sum >= threshold) {
       // Scale linearly within this bucket
       // 计算左右边界值
@@ -237,11 +237,8 @@ double Histogram::Percentile(double p) const {
       // 计算左右边界值对应的累积样本数
       double left_sum = sum - buckets_[b];
       double right_sum = sum;
-      // 确定目标值所在位置：分子：当前所在桶的第几个数据，分母：当前桶的数量
       double pos = (threshold - left_sum) / (right_sum - left_sum);
-      // 计算目标值：下界+当前桶的值范围*位置
       double r = left_point + (right_point - left_point) * pos;
-      // 判断上下界
       if (r < min_) r = min_;
       if (r > max_) r = max_;
       return r;
@@ -250,22 +247,17 @@ double Histogram::Percentile(double p) const {
   return max_;
 }
 
-// 计算平均值
 double Histogram::Average() const {
   if (num_ == 0.0) return 0;
-  // 总值/样本数
   return sum_ / num_;
 }
 
-// 计算标准差
 double Histogram::StandardDeviation() const {
   if (num_ == 0.0) return 0;
-  // 简化之后的公式
   double variance = (sum_squares_ * num_ - sum_ * sum_) / (num_ * num_);
   return sqrt(variance);
 }
 
-// 将直方图转换为字符串
 std::string Histogram::ToString() const {
   std::string r;
   char buf[200];
